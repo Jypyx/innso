@@ -1,0 +1,216 @@
+@import '~vue-good-table/dist/vue-good-table.css';
+
+.vgt-wrap {
+  height: 100%;
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    border: 0;
+    border-top: 1px solid $generic-color-border;
+    border-bottom: 1px solid $generic-color-border;
+    background: $white;
+    padding: $gutter-mobile / 2 $gutter-mobile;
+
+    .footer {
+      &__row-count {
+        &__select,
+        &__label {
+          color: $generic-color-text-alt;
+          font-size: $font-size-default;
+        }
+
+        &:after {
+          @include icons;
+
+          top: 50%;
+          right: 0;
+          transform: translateY(-50%);
+          margin: 0;
+          border: 0;
+          width: initial;
+          height: initial;
+          color: $generic-color-text-alt;
+          content: 'chevron_down';
+        }
+      }
+
+      &__navigation {
+        display: flex;
+        align-items: center;
+        font-size: $font-size-default;
+
+        &__info {
+          color: $generic-color-text-alt;
+        }
+
+        &__page-btn {
+          display: flex;
+          align-items: center;
+          color: $generic-color-text-alt;
+          font-weight: 500;
+
+          span {
+            font-size: $font-size-default;
+          }
+
+          .chevron {
+            &:after {
+              position: initial;
+              margin-top: 0;
+            }
+
+            &.left {
+              margin: 0;
+
+              &:after {
+                @include icons;
+
+                left: -24px;
+                border: 0;
+                content: 'arrow_left';
+              }
+            }
+
+            &.right {
+              margin: 0;
+
+              &:after {
+                @include icons;
+
+                right: -24px;
+                margin-left: 0;
+                border: 0;
+                content: 'arrow_right';
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.vgt-inner-wrap {
+  border-radius: 0;
+  height: 100%;
+}
+
+.vgt-responsive {
+  height: calc(100% - 37px);
+}
+
+.vgt-clearfix {
+  &:after {
+    display: none;
+  }
+}
+
+table.vgt-table {
+  border: 0;
+
+  th {
+    &.sortable {
+      &:after,
+      &:before {
+        @include icons;
+
+        position: initial;
+        position: absolute;
+        top: initial;
+        top: 50%;
+        right: initial;
+        transform: translateY(-50%);
+        transition: transform $transition-duration-fast $transition-effect-default;
+        margin-top: initial;
+        border: 0;
+        width: initial;
+        height: initial;
+        color: transparent;
+      }
+
+      &:before {
+        display: none;
+      }
+
+      &:after {
+        content: 'arrow_up';
+      }
+
+      button {
+        z-index: 2;
+        cursor: pointer;
+
+        &:before,
+        &:after {
+          display: none;
+        }
+      }
+    }
+
+    &.sorting-asc,
+    &.sorting-desc {
+      color: $generic-color-text;
+      font-weight: 700;
+    }
+
+    &.sorting-asc {
+      &:after {
+        color: $generic-color-text;
+      }
+    }
+
+    &.sorting-desc {
+      &:after {
+        transform: rotate(180deg) translateY(50%);
+        color: $generic-color-text;
+      }
+    }
+  }
+
+  td {
+    border-color: $generic-color-border;
+    padding: $gutter-mobile;
+    height: $table-row-height;
+    vertical-align: middle;
+    color: $generic-color-text;
+  }
+
+  thead {
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      box-shadow: 0 1px 0 0 $generic-color-border;
+      background: $white;
+      padding: 0 $gutter-mobile;
+      height: 48px;
+      vertical-align: middle;
+      text-transform: uppercase;
+      color: $generic-color-text-alt;
+      font-size: $font-size-sm;
+      font-weight: 500;
+
+      &.filter-th {
+        top: 48px;
+      }
+
+      &.text-center {
+        text-align: center;
+      }
+    }
+  }
+
+  tr {
+    &:hover {
+      background-color: rgba($black, 0.06);
+      cursor: pointer;
+    }
+
+    &:last-child {
+      td {
+        border-bottom: 0;
+      }
+    }
+  }
+}

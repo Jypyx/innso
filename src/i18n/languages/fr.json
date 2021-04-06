@@ -1,0 +1,39 @@
+{
+  "table": {
+    "column": {
+      "customer": "Client",
+      "status": "Statut",
+      "lastInteraction": "Dernière interaction",
+      "dueDate": "Échéance",
+      "assignedTo": "Assigné",
+      "contactChannel": "Canal de contact",
+      "lastComment": "Dernier commentaire",
+      "attachment": "Pièce-jointe",
+      "actions": "Actions"
+    },
+    "pagination": {
+      "prev": "Précédent",
+      "next": "Suivant",
+      "rows": "Lignes par page",
+      "of": "de"
+    },
+    "status": {
+      "waiting": "En attente",
+      "reserved": "Réservé",
+      "inProgress": "En cours",
+      "toTreat": "À traiter",
+      "finished": "Terminé"
+    },
+    "channel": {
+      "form": "Formulaire",
+      "file": "Fichier",
+      "messenger": "Messenger",
+      "facebook": "Facebook",
+      "twiter": "Twitter"
+    },
+    "tooltip": {
+      "attachment": "Télécharger la pièce-jointe <br /><strong>{file}</strong>",
+      "contact": "Contacter le client <br /><strong>{customer}</strong>"
+    }
+  }
+}

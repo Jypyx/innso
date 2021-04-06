@@ -1,0 +1,11 @@
+{
+  "table": {
+    "column": {},
+    "pagination": {
+      "prev": "Previous",
+      "suivant": "Next",
+      "rows": "Rows per page",
+      "of": "of"
+    }
+  }
+}

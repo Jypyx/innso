@@ -1,0 +1,137 @@
+.tooltip {
+  display: block;
+  z-index: 900;
+  outline: 0;
+
+  &.popover {
+    z-index: 101;
+
+    .popover-inner {
+      outline: 0;
+      border-radius: $radius-default;
+      box-shadow: 0 0 15px var(--box-shadow-color);
+      background-color: var(--bg-color);
+      padding: 0;
+      max-width: initial;
+      overflow: hidden;
+      color: $tooltip-color-text;
+
+      &.no-overflow {
+        overflow: initial;
+      }
+    }
+
+    .popover-arrow {
+      display: none;
+      border-color: $tooltip-color-bg;
+    }
+  }
+
+  &[aria-hidden='true'] {
+    transition: opacity 0.15s, visibility 0.15s;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &[aria-hidden='false'] {
+    transition: opacity 0.15s;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &-inner {
+    border-radius: $radius-tooltip;
+    background-color: $tooltip-color-bg;
+    padding: $tooltip-padding;
+    max-width: $tooltip-max-width;
+    text-align: center;
+    color: $tooltip-color-text;
+    font-size: $tooltip-font-size;
+  }
+
+  &-arrow {
+    position: absolute;
+    z-index: 1;
+    margin: 5px;
+    border-style: solid;
+    border-color: $tooltip-color-bg;
+    width: 0;
+    height: 0;
+  }
+
+  &[x-placement^='top'] {
+    margin-bottom: 5px;
+
+    .tooltip-arrow {
+      bottom: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+      border-width: 5px 5px 0 5px;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+    }
+  }
+
+  &[x-placement^='bottom'] {
+    margin-top: 5px;
+
+    .tooltip-arrow {
+      top: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+      border-width: 0 5px 5px 5px;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-left-color: transparent;
+    }
+  }
+
+  &[x-placement^='right'] {
+    margin-left: 5px;
+
+    .tooltip-arrow {
+      top: calc(50% - 5px);
+      left: -5px;
+      margin-right: 0;
+      margin-left: 0;
+      border-width: 5px 5px 5px 0;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+    }
+  }
+
+  &[x-placement^='left'] {
+    margin-right: 5px;
+
+    .tooltip-arrow {
+      top: calc(50% - 5px);
+      right: -5px;
+      margin-right: 0;
+      margin-left: 0;
+      border-width: 5px 0 5px 5px;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+    }
+  }
+
+  &[x-out-of-boundaries] {
+    display: none;
+  }
+
+  &-line {
+    margin-bottom: 4px;
+    max-width: $tooltip-max-width;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

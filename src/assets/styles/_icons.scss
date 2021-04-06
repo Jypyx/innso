@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'BackofficeIcons';
+  src: url('~@/assets/fonts/BackofficeIcons/BackofficeIcons.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^='backoffice-icons'],
+[class*=' backoffice-icons'] {
+  @include icons;
+}

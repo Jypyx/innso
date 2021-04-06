@@ -1,0 +1,66 @@
+{	
+  "extends": [	
+    "stylelint-config-standard",	
+    "stylelint-config-recommended-scss",
+    "stylelint-config-concentric-order",
+    "stylelint-config-prettier"	
+  ],	
+  "plugins": [	
+    "stylelint-scss",	
+  ],	
+  "rules": {
+    "order/order": [
+      { type: "at-rule", name: "import" },
+      "dollar-variables",
+      "custom-properties",
+      { type: "at-rule", name: "extend" },
+      { type: "at-rule", name: "include" },
+      { type: "at-rule", name: "mixin" },
+      { type: "at-rule", name: "add-mixin" },
+      "declarations",
+      { type: "at-rule", name: "media", hasBlock: true },
+      {
+        type: "rule",
+        selector: '^&::[\w-]+',
+        hasBlock: true
+      },
+      {
+        type: "rule",
+        selector: '^&:[\w-]+',
+        hasBlock: true
+      },
+      {
+        type: "at-rule",
+        name: "include",
+        parameter: /breakpoints?/i,
+        hasBlock: true
+      },
+      {
+        type: "at-rule",
+        name: "mixin",
+        parameter: /breakpoints?/i,
+        hasBlock: true
+      },
+      {
+        type: "at-rule",
+        name: "add-mixin",
+        parameter: /breakpoints?/i,
+        hasBlock: true
+      },
+    ],
+    "selector-pseudo-element-colon-notation": "single",	
+    "at-rule-empty-line-before": [	
+      "always",	
+      {	
+        "except": ["blockless-after-same-name-blockless", "first-nested"],	
+        "ignore": ["after-comment"],	
+        "ignoreAtRules": ["else"],	
+      },	
+    ],	
+    "block-closing-brace-newline-after": [	
+      "always", {	
+        "ignoreAtRules": [ "if", "else" ]	
+      }	
+    ],	
+  }	
+}
