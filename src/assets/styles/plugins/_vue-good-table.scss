@@ -8,7 +8,6 @@
     justify-content: space-between;
     border: 0;
     border-top: 1px solid $generic-color-border;
-    border-bottom: 1px solid $generic-color-border;
     background: $white;
     padding: $gutter-mobile / 2 $gutter-mobile;
 
@@ -97,7 +96,8 @@
 }
 
 .vgt-responsive {
-  height: calc(100% - 37px);
+  background-color: $white;
+  height: calc(100% - 43px);
 }
 
 .vgt-clearfix {
@@ -193,6 +193,7 @@ table.vgt-table {
 
       &.filter-th {
         top: 48px;
+        padding: $gutter-mobile / 2 $gutter-mobile;
       }
 
       &.text-center {

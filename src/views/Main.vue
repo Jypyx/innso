@@ -1,5 +1,9 @@
 <template>
   <div class="main">
+    <div class="main__search">
+      <span class="main__search__icon backoffice-icons">search</span>
+      <input class="main__search__input" type="text" v-model="searchTerm" :placeholder="$t('search.placeholder')" />
+    </div>
     <vue-good-table
       class="main__table"
       style-class="vgt-table"
@@ -7,6 +11,10 @@
       :columns="columns"
       :rows="rows"
       :pagination-options="paginationOptions"
+      :search-options="{
+        enabled: true,
+        externalQuery: searchTerm,
+      }"
     >
       <template slot="table-row" slot-scope="props" class="main__table__row">
         <div v-if="props.column.field == 'customer.last_name'" class="main__table__row__customer">
@@ -49,12 +57,17 @@
           </div>
         </div>
         <div v-else-if="props.column.field == 'contact_channel'" class="main__table__row__contact-channel">
-          <span class="main__table__row__contact-channel__icon backoffice-icons">
+          <span
+            class="main__table__row__contact-channel__icon backoffice-icons"
+            v-tooltip="{
+              placement: 'top',
+              trigger: 'hover',
+              content: $t(`table.channel.${props.formattedRow[props.column.field]}`),
+              offset: 3,
+            }"
+          >
             {{ props.formattedRow[props.column.field] }}
           </span>
-          <div class="main__table__row__contact-channel__label">
-            {{ $t(`table.channel.${props.formattedRow[props.column.field]}`) }}
-          </div>
         </div>
         <div v-else-if="props.column.field == 'attachments'" class="main__table__row__attachment">
           <span
@@ -99,6 +112,14 @@
 import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import Status from '@/components/Status.vue'
+import { uniqBy } from 'lodash'
+import flatPickr from 'flatpickr'
+import { French } from 'flatpickr/dist/l10n/fr.js'
+French.rangeSeparator = ' - '
+const isBetween = require('dayjs/plugin/isBetween')
+const customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(isBetween)
+dayjs.extend(customParseFormat)
 
 export default {
   name: 'Main',
@@ -107,53 +128,7 @@ export default {
   },
   data() {
     return {
-      columns: [
-        {
-          label: this.$t('table.column.customer'),
-          field: 'customer.last_name',
-          filterOptions: {
-            enabled: true,
-          },
-        },
-        {
-          label: this.$t('table.column.status'),
-          field: 'status',
-        },
-        {
-          label: this.$t('table.column.lastInteraction'),
-          field: 'interaction_creation_date',
-        },
-        {
-          label: this.$t('table.column.dueDate'),
-          field: 'due_date',
-        },
-        {
-          label: this.$t('table.column.assignedTo'),
-          field: 'assignedTO',
-        },
-        {
-          label: this.$t('table.column.contactChannel'),
-          field: 'contact_channel',
-        },
-        {
-          label: this.$t('table.column.lastComment'),
-          field: 'last_comment',
-          width: '350px',
-          sortable: false,
-        },
-        {
-          label: this.$t('table.column.attachment'),
-          field: 'attachments',
-          thClass: 'text-center',
-          sortable: false,
-        },
-        {
-          label: this.$t('table.column.actions'),
-          field: 'actions',
-          thClass: 'text-center',
-          sortable: false,
-        },
-      ],
+      searchTerm: '',
       paginationOptions: {
         enabled: true,
         mode: 'records',
@@ -169,10 +144,119 @@ export default {
       },
     }
   },
+  mounted() {
+    let input = 'input[placeholder="Trier par date"]'
+    flatPickr(input, {
+      locale: French,
+      dateFormat: 'd/m/Y',
+      mode: 'range',
+      allowInput: true,
+    })
+  },
   computed: {
     ...mapState({
       rows: state => state.data,
     }),
+    uniqUsers() {
+      return uniqBy(this.rows, 'assignedTO').map(user => user.assignedTO)
+    },
+    columns() {
+      return [
+        {
+          label: this.$t('table.column.customer'),
+          field: 'customer.last_name',
+          filterOptions: {
+            enabled: true,
+            placeholder: this.$t('table.filter.placeholder.customer'),
+          },
+        },
+        {
+          label: this.$t('table.column.status'),
+          field: 'status',
+          filterOptions: {
+            enabled: true,
+            placeholder: this.$t('table.filter.placeholder.status'),
+            filterDropdownItems: [
+              { value: 'waiting', text: this.$t('table.status.waiting') },
+              { value: 'reserved', text: this.$t('table.status.reserved') },
+              { value: 'toTreat', text: this.$t('table.status.toTreat') },
+              { value: 'inProgress', text: this.$t('table.status.inProgress') },
+              { value: 'finished', text: this.$t('table.status.finished') },
+            ],
+          },
+        },
+        {
+          label: this.$t('table.column.lastInteraction'),
+          field: 'interaction_creation_date',
+          filterOptions: {
+            enabled: true,
+            placeholder: this.$t('table.filter.placeholder.date'),
+            filterFn: this.dateFilterFn,
+          },
+        },
+        {
+          label: this.$t('table.column.dueDate'),
+          field: 'due_date',
+          filterOptions: {
+            enabled: true,
+            placeholder: this.$t('table.filter.placeholder.date'),
+            filterFn: this.dateFilterFn,
+          },
+        },
+        {
+          label: this.$t('table.column.assignedTo'),
+          field: 'assignedTO',
+          filterOptions: {
+            enabled: true,
+            placeholder: this.$t('table.filter.placeholder.assignedTo'),
+            filterDropdownItems: this.uniqUsers,
+          },
+        },
+        {
+          label: this.$t('table.column.lastComment'),
+          field: 'last_comment',
+          width: '350px',
+          sortable: false,
+        },
+        {
+          label: this.$t('table.column.contactChannel'),
+          field: 'contact_channel',
+          thClass: 'text-center',
+          filterOptions: {
+            enabled: true,
+            placeholder: this.$t('table.filter.placeholder.contactChannel'),
+            filterDropdownItems: [
+              { value: 'form', text: this.$t('table.channel.form') },
+              { value: 'file', text: this.$t('table.channel.file') },
+              { value: 'messenger', text: this.$t('table.channel.messenger') },
+              { value: 'facebook', text: this.$t('table.channel.facebook') },
+              { value: 'twiter', text: this.$t('table.channel.twiter') },
+            ],
+          },
+        },
+        {
+          label: this.$t('table.column.attachment'),
+          field: 'attachments',
+          thClass: 'text-center',
+          sortable: false,
+          filterOptions: {
+            enabled: true,
+            placeholder: this.$t('table.filter.placeholder.attachment'),
+            filterDropdownItems: [
+              { value: 1, text: this.$t('table.attachment.yes') },
+              { value: 0, text: this.$t('table.attachment.no') },
+            ],
+            filterFn: this.attachmentFilterFn,
+          },
+        },
+        {
+          label: this.$t('table.column.actions'),
+          field: 'actions',
+          thClass: 'text-center',
+          sortable: false,
+        },
+      ]
+    },
   },
   methods: {
     formatDate(date) {
@@ -190,13 +274,57 @@ export default {
       }
       return 'passed'
     },
+    attachmentFilterFn(data, filterString) {
+      if (filterString === '1') {
+        return data !== null
+      }
+      return data === null
+    },
+    dateFilterFn(data, filterString) {
+      let dateRange = filterString.split(' - ')
+      let startDate = dateRange[0]
+      let endDate = dateRange[1]
+      if (dateRange.length > 1) {
+        return dayjs(data).isBetween(dayjs(startDate, 'DD/MM/YYYY'), dayjs(endDate, 'DD/MM/YYYY'))
+      } else if (dateRange.length === 1) {
+        return dayjs(data).isSame(dayjs(startDate, 'DD/MM/YYYY'), 'day')
+      }
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
 .main {
+  &__search {
+    position: relative;
+    margin-bottom: $gutter-tablet;
+
+    &__icon {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: $generic-color-border;
+    }
+
+    &__input {
+      border: 1px solid $generic-color-border;
+      border-radius: $radius-default;
+      padding: 0 12px 0 12px + 24px + 8px;
+      width: 100%;
+      min-height: 44px;
+
+      &:focus {
+        outline: 0;
+        border: 1px solid rgba($black, 0.3);
+      }
+    }
+  }
+
   &__table {
+    overflow-y: auto;
+
     &__row {
       &__customer {
         &__full-name {
@@ -269,12 +397,8 @@ export default {
       }
 
       &__contact-channel {
-        display: inline-flex;
-        align-items: center;
-
-        &__label {
-          margin-left: 8px;
-        }
+        display: flex;
+        justify-content: center;
       }
 
       &__attachment,

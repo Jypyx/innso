@@ -1,4 +1,7 @@
 {
+  "search": {
+    "placeholder": "Rechercher dans le tableau"
+  },
   "table": {
     "column": {
       "customer": "Client",
@@ -31,9 +34,23 @@
       "facebook": "Facebook",
       "twiter": "Twitter"
     },
+    "attachment": {
+      "yes": "Oui",
+      "no": "Non"
+    },
     "tooltip": {
       "attachment": "Télécharger la pièce-jointe <br /><strong>{file}</strong>",
       "contact": "Contacter le client <br /><strong>{customer}</strong>"
+    },
+    "filter": {
+      "placeholder": {
+        "customer": "Rechercher un client",
+        "status": "Trier par status",
+        "assignedTo": "Trier par utilisateur",
+        "contactChannel": "Type canal",
+        "attachment": "Avec PJ",
+        "date": "Trier par date"
+      }
     }
   }
 }

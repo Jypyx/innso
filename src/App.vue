@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header class="app__header" />
-    <router-view class="app__main" />
+    <router-view class="app__main" v-if="data && data.length > 0" />
   </div>
 </template>
 

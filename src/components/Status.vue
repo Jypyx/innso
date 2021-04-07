@@ -28,11 +28,12 @@ export default {
 
 <style lang="scss" scoped>
 .status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   border-radius: 16px;
   background-color: rgba(var(--color), 0.1);
   padding: 0 6px;
+  width: 100px;
   height: 24px;
 
   &__dot {
